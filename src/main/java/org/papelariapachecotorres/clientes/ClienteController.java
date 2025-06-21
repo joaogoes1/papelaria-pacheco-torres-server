@@ -3,7 +3,9 @@ package org.papelariapachecotorres.clientes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/clientes")
@@ -47,6 +49,21 @@ public class ClienteController {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/importar")
+    public ResponseEntity<String> importClientes(@RequestBody Map<String, String> payload) {
+        String path = payload.get("path");
+        if (path == null || path.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("O caminho do arquivo ('path') é obrigatório.");
+        }
+
+        try {
+            int count = service.importClientesCsv(path);
+            return ResponseEntity.ok(count + " clientes importados com sucesso de: " + path);
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body("Erro ao importar clientes: " + e.getMessage());
         }
     }
 } 

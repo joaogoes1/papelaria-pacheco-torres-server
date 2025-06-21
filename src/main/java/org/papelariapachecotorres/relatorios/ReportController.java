@@ -45,19 +45,4 @@ public class ReportController {
             return ResponseEntity.internalServerError().body("Erro ao exportar relatório: " + e.getMessage());
         }
     }
-
-    @PostMapping("/clientes/importar")
-    public ResponseEntity<String> importClientes(@RequestBody Map<String, String> payload) {
-        String path = payload.get("path");
-        if (path == null || path.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("O caminho do arquivo ('path') é obrigatório.");
-        }
-
-        try {
-            int count = reportService.importClientesCsv(path);
-            return ResponseEntity.ok(count + " clientes importados com sucesso de: " + path);
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("Erro ao importar clientes: " + e.getMessage());
-        }
-    }
 } 

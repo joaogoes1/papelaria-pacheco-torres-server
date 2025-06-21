@@ -77,23 +77,4 @@ public class ReportService {
         }
         return filePath.toAbsolutePath().toString();
     }
-
-    public int importClientesCsv(String path) throws IOException {
-        int recordsAdded = 0;
-        try (Reader in = new FileReader(path);
-             CSVParser parser = new CSVParser(in, CSVFormat.DEFAULT.withHeader().withSkipHeaderRecord())) {
-            for (CSVRecord record : parser) {
-                Cliente cliente = new Cliente();
-                cliente.setNome(record.get("nome"));
-                cliente.setCpf(record.get("cpf"));
-                cliente.setEndereco(record.get("endereco"));
-                cliente.setTelefone(record.get("telefone"));
-                cliente.setEmail(record.get("email"));
-                cliente.setCreatedAt(record.get("createdAt"));
-                clienteRepository.save(cliente);
-                recordsAdded++;
-            }
-        }
-        return recordsAdded;
-    }
-} 
+}
