@@ -152,17 +152,16 @@ src/main/java/org/papelariapachecotorres/
 
 2. **Execute o projeto**
    ```bash
-   # Usando o wrapper do Gradle
-   ./gradlew bootRun
-   
-   # Ou compile e execute
-   ./gradlew build
-   java -jar build/libs/papelaria-pacheco-torres-0.0.1-SNAPSHOT.jar
+   docker compose up
    ```
 
 3. **Acesse a aplicação**
-   - A aplicação estará disponível em: `http://localhost:8080`
-   - Swagger UI (se configurado): `http://localhost:8080/swagger-ui.html`
+   - CURL:
+     - A aplicação estará disponível em: `http://localhost:8080`
+   - Front-end:
+     - Clone o repositório `PapelariaPachecoTorres` (Em CamelCase)
+     - Execute `npm run dev` no diretório do projeto
+     - A aplicação estará disponível em: `http://localhost:5173`
 
 ### Comandos Úteis
 
