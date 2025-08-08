@@ -1,10 +1,24 @@
 package org.papelariapachecotorres.estoque;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "estoque")
 public class Estoque {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @Column(name = "produto_id", nullable = false)
     private Integer produtoId;
+    
+    @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
+    
+    @Column(name = "quantidade_minima", nullable = false)
     private Integer quantidadeMinima;
+    
+    @Column(name = "ultima_atualizacao", nullable = false)
     private String ultimaAtualizacao;
 
     public Estoque() {}

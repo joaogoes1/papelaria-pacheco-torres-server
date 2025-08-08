@@ -14,7 +14,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService {
-    private final ClienteMockRepository repository = new ClienteMockRepository();
+    private final ClienteRepository repository;
+
+    public ClienteService(ClienteRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Cliente> getAll() {
         return repository.findAll();
@@ -29,11 +33,26 @@ public class ClienteService {
     }
 
     public Cliente update(int id, Cliente cliente) {
-        return repository.update(id, cliente);
+        Optional<Cliente> existing = repository.findById(id);
+        if (existing.isPresent()) {
+            Cliente c = existing.get();
+            c.setNome(cliente.getNome());
+            c.setCpf(cliente.getCpf());
+            c.setEndereco(cliente.getEndereco());
+            c.setTelefone(cliente.getTelefone());
+            c.setEmail(cliente.getEmail());
+            return repository.save(c);
+        }
+        return null;
     }
 
     public boolean delete(int id) {
-        return repository.delete(id);
+        Optional<Cliente> cliente = repository.findById(id);
+        if (cliente.isPresent()) {
+            repository.delete(cliente.get());
+            return true;
+        }
+        return false;
     }
 
     public int importClientesCsv(String path) throws IOException {

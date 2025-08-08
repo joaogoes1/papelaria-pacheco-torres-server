@@ -1,12 +1,30 @@
 package org.papelariapachecotorres.clientes;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "clientes")
 public class Cliente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @Column(name = "nome", nullable = false)
     private String nome;
+    
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
+    
+    @Column(name = "endereco", nullable = false)
     private String endereco;
+    
+    @Column(name = "telefone", nullable = false)
     private String telefone;
+    
+    @Column(name = "email", nullable = false)
     private String email;
+    
+    @Column(name = "created_at", nullable = false)
     private String createdAt;
 
     public Cliente() {}

@@ -1,12 +1,30 @@
 package org.papelariapachecotorres.produtos;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "produtos")
 public class Produto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @Column(name = "nome", nullable = false)
     private String nome;
+    
+    @Column(name = "codigo", nullable = false, unique = true)
     private String codigo;
+    
+    @Column(name = "preco", nullable = false)
     private Double preco;
+    
+    @Column(name = "categoria", nullable = false)
     private String categoria;
+    
+    @Column(name = "descricao")
     private String descricao;
+    
+    @Column(name = "created_at", nullable = false)
     private String createdAt;
 
     public Produto() {}

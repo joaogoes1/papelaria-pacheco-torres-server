@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EstoqueService {
-    private final EstoqueMockRepository repository = new EstoqueMockRepository();
+    private final EstoqueRepository repository;
+
+    public EstoqueService(EstoqueRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Estoque> getAll() {
         return repository.findAll();
@@ -26,10 +30,24 @@ public class EstoqueService {
     }
 
     public Estoque update(int id, Estoque estoque) {
-        return repository.update(id, estoque);
+        Optional<Estoque> existing = repository.findById(id);
+        if (existing.isPresent()) {
+            Estoque e = existing.get();
+            e.setProdutoId(estoque.getProdutoId());
+            e.setQuantidade(estoque.getQuantidade());
+            e.setQuantidadeMinima(estoque.getQuantidadeMinima());
+            e.setUltimaAtualizacao(estoque.getUltimaAtualizacao());
+            return repository.save(e);
+        }
+        return null;
     }
 
     public boolean delete(int id) {
-        return repository.delete(id);
+        Optional<Estoque> estoque = repository.findById(id);
+        if (estoque.isPresent()) {
+            repository.delete(estoque.get());
+            return true;
+        }
+        return false;
     }
 } 

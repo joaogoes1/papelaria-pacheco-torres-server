@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VendaService {
-    private final VendaMockRepository repository = new VendaMockRepository();
+    private final VendaRepository repository;
+
+    public VendaService(VendaRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Venda> getAll() {
         return repository.findAll();
@@ -22,10 +26,24 @@ public class VendaService {
     }
 
     public Venda update(int id, Venda venda) {
-        return repository.update(id, venda);
+        Optional<Venda> existing = repository.findById(id);
+        if (existing.isPresent()) {
+            Venda v = existing.get();
+            v.setClienteId(venda.getClienteId());
+            v.setItens(venda.getItens());
+            v.setTotal(venda.getTotal());
+            v.setData(venda.getData());
+            return repository.save(v);
+        }
+        return null;
     }
 
     public boolean delete(int id) {
-        return repository.delete(id);
+        Optional<Venda> venda = repository.findById(id);
+        if (venda.isPresent()) {
+            repository.delete(venda.get());
+            return true;
+        }
+        return false;
     }
 } 

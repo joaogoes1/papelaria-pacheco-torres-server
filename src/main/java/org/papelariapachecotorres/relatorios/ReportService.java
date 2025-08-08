@@ -1,21 +1,17 @@
 package org.papelariapachecotorres.relatorios;
 
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
 import org.papelariapachecotorres.clientes.Cliente;
-import org.papelariapachecotorres.clientes.ClienteMockRepository;
+import org.papelariapachecotorres.clientes.ClienteRepository;
 import org.papelariapachecotorres.estoque.Estoque;
-import org.papelariapachecotorres.estoque.EstoqueMockRepository;
+import org.papelariapachecotorres.estoque.EstoqueRepository;
 import org.papelariapachecotorres.vendas.Venda;
-import org.papelariapachecotorres.vendas.VendaMockRepository;
+import org.papelariapachecotorres.vendas.VendaRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,9 +20,15 @@ import java.util.List;
 @Service
 public class ReportService {
 
-    private final ClienteMockRepository clienteRepository = new ClienteMockRepository();
-    private final VendaMockRepository vendaRepository = new VendaMockRepository();
-    private final EstoqueMockRepository estoqueRepository = new EstoqueMockRepository();
+    private final ClienteRepository clienteRepository;
+    private final VendaRepository vendaRepository;
+    private final EstoqueRepository estoqueRepository;
+
+    public ReportService(ClienteRepository clienteRepository, VendaRepository vendaRepository, EstoqueRepository estoqueRepository) {
+        this.clienteRepository = clienteRepository;
+        this.vendaRepository = vendaRepository;
+        this.estoqueRepository = estoqueRepository;
+    }
 
     private Path ensureReportDirectory() throws IOException {
         Path reportDir = Paths.get("reports");
