@@ -66,7 +66,7 @@ public class ClienteService {
                 cliente.setEndereco(record.get("endereco"));
                 cliente.setTelefone(record.get("telefone"));
                 cliente.setEmail(record.get("email"));
-                cliente.setCreatedAt(Instant.now().toString());
+                cliente.setCreatedAt(Instant.now());
                 repository.save(cliente);
                 recordsAdded++;
             }

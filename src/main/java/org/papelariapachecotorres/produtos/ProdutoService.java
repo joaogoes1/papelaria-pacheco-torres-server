@@ -1,5 +1,6 @@
 package org.papelariapachecotorres.produtos;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,7 @@ public class ProdutoService {
             p.setPreco(produto.getPreco());
             p.setCategoria(produto.getCategoria());
             p.setDescricao(produto.getDescricao());
+            p.setCreatedAt(Instant.now());
             return repository.save(p);
         }
         return null;

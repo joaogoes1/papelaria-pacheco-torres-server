@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pacheco_torres:
+    container_name: pacheco_torres
+    build: .
+    ports:
+      - '8080:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+
+  evolution-api:
+    container_name: evolution_api
+    image: atendai/evolution-api:latest
+    restart: always
+    ports:
+      - '8081:8081'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - EVOLUTION_API_AUTHENTICATION_API_KEY=${EVOLUTION_API_AUTHENTICATION_API_KEY}
+      - DATABASE_ENABLED=${DATABASE_ENABLED}
+      - DATABASE_PROVIDER=${DATABASE_PROVIDER}
+      - DATABASE_CONNECTION_URI=${DATABASE_CONNECTION_URI}
+
+  n8n:
+    image: n8nio/n8n:1.68.0
+    ports:
+      - '5678:5678'
+    env_file:
+      - .env
+    environment:
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+
+volumes:
+  pgdata:

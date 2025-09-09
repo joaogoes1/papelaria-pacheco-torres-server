@@ -1,6 +1,9 @@
 package org.papelariapachecotorres.produtos;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import java.math.BigDecimal;
+import java.time.Instant;
 
 @Entity
 @Table(name = "produtos")
@@ -8,28 +11,29 @@ public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     @Column(name = "nome", nullable = false)
     private String nome;
-    
+
     @Column(name = "codigo", nullable = false, unique = true)
     private String codigo;
-    
-    @Column(name = "preco", nullable = false)
-    private Double preco;
-    
+
+    @Column(name = "preco", nullable = false, precision = 10, scale = 2)
+    private BigDecimal preco;  // DECIMAL(10,2)
+
     @Column(name = "categoria", nullable = false)
     private String categoria;
-    
+
     @Column(name = "descricao")
     private String descricao;
-    
-    @Column(name = "created_at", nullable = false)
-    private String createdAt;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
 
     public Produto() {}
 
-    public Produto(Integer id, String nome, String codigo, Double preco, String categoria, String descricao, String createdAt) {
+    public Produto(Integer id, String nome, String codigo, BigDecimal preco, String categoria, String descricao, Instant createdAt) {
         this.id = id;
         this.nome = nome;
         this.codigo = codigo;
@@ -45,12 +49,12 @@ public class Produto {
     public void setNome(String nome) { this.nome = nome; }
     public String getCodigo() { return codigo; }
     public void setCodigo(String codigo) { this.codigo = codigo; }
-    public Double getPreco() { return preco; }
-    public void setPreco(Double preco) { this.preco = preco; }
+    public BigDecimal getPreco() { return preco; }
+    public void setPreco(BigDecimal preco) { this.preco = preco; }
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
-} 
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+}
