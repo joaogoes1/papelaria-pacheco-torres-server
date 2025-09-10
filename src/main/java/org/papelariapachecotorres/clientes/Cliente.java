@@ -1,6 +1,8 @@
 package org.papelariapachecotorres.clientes;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "clientes")
@@ -8,28 +10,29 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     @Column(name = "nome", nullable = false)
     private String nome;
-    
+
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
-    
+
     @Column(name = "endereco", nullable = false)
     private String endereco;
-    
+
     @Column(name = "telefone", nullable = false)
     private String telefone;
-    
+
     @Column(name = "email", nullable = false)
     private String email;
-    
-    @Column(name = "created_at", nullable = false)
-    private String createdAt;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
 
     public Cliente() {}
 
-    public Cliente(Integer id, String nome, String cpf, String endereco, String telefone, String email, String createdAt) {
+    public Cliente(Integer id, String nome, String cpf, String endereco, String telefone, String email, Instant createdAt) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -51,6 +54,6 @@ public class Cliente {
     public void setTelefone(String telefone) { this.telefone = telefone; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
-} 
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+}

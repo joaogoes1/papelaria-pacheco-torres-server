@@ -1,5 +1,6 @@
 package org.papelariapachecotorres.clientes;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,27 +18,35 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<Cliente> getAll() {
-        return service.getAll();
+    public List<ClienteDTO> getAll() {
+        return service
+                .getAll()
+                .stream()
+                .map(ClienteDTO::fromDomain)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getById(@PathVariable int id) {
-        return service.getById(id)
-                .map(ResponseEntity::ok)
+    public ResponseEntity<ClienteDTO> getById(@PathVariable int id) {
+        return service
+                .getById(id)
+                .map((cliente) -> ResponseEntity.ok(ClienteDTO.fromDomain(cliente)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Cliente create(@RequestBody Cliente cliente) {
-        return service.create(cliente);
+    public ResponseEntity<ClienteDTO> create(@RequestBody ClienteDTO clienteDTO) {
+        Cliente cliente = service.create(clienteDTO.toDomain());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ClienteDTO.fromDomain(cliente));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> update(@PathVariable int id, @RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable int id, @RequestBody Cliente cliente) {
         Cliente updated = service.update(id, cliente);
         if (updated != null) {
-            return ResponseEntity.ok(updated);
+            return ResponseEntity.ok(ClienteDTO.fromDomain(updated));
         } else {
             return ResponseEntity.notFound().build();
         }

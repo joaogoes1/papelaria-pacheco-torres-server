@@ -1,6 +1,7 @@
 package org.papelariapachecotorres.estoque;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "estoque")
@@ -8,22 +9,23 @@ public class Estoque {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
+    // Está como FK inteira no schema; dá pra evoluir para @ManyToOne(Produto) depois.
     @Column(name = "produto_id", nullable = false)
     private Integer produtoId;
-    
+
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
-    
+
     @Column(name = "quantidade_minima", nullable = false)
     private Integer quantidadeMinima;
-    
+
     @Column(name = "ultima_atualizacao", nullable = false)
-    private String ultimaAtualizacao;
+    private Instant ultimaAtualizacao;
 
     public Estoque() {}
 
-    public Estoque(Integer id, Integer produtoId, Integer quantidade, Integer quantidadeMinima, String ultimaAtualizacao) {
+    public Estoque(Integer id, Integer produtoId, Integer quantidade, Integer quantidadeMinima, Instant ultimaAtualizacao) {
         this.id = id;
         this.produtoId = produtoId;
         this.quantidade = quantidade;
@@ -39,6 +41,6 @@ public class Estoque {
     public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
     public Integer getQuantidadeMinima() { return quantidadeMinima; }
     public void setQuantidadeMinima(Integer quantidadeMinima) { this.quantidadeMinima = quantidadeMinima; }
-    public String getUltimaAtualizacao() { return ultimaAtualizacao; }
-    public void setUltimaAtualizacao(String ultimaAtualizacao) { this.ultimaAtualizacao = ultimaAtualizacao; }
-} 
+    public Instant getUltimaAtualizacao() { return ultimaAtualizacao; }
+    public void setUltimaAtualizacao(Instant ultimaAtualizacao) { this.ultimaAtualizacao = ultimaAtualizacao; }
+}

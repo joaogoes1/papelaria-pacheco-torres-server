@@ -21,8 +21,9 @@ public class VendaController {
     }
 
     @GetMapping
-    public List<Venda> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<VendaDTO>> getAll() {
+        List<Venda> vendas = service.getAll();
+        return ResponseEntity.ok(vendas.stream().map(VendaDTO::fromDomain).toList());
     }
 
     @GetMapping("/{id}")
