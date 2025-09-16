@@ -1,9 +1,9 @@
 -- Schema para Papelaria Pacheco Torres
-DROP TABLE clientes
-DROP TABLE produtos
-DROP TABLE estoque
-DROP TABLE vendas
-DROP TABLE itens_venda
+DROP TABLE IF EXISTS itens_venda;
+DROP TABLE IF EXISTS vendas;
+DROP TABLE IF EXISTS estoque;
+DROP TABLE IF EXISTS produtos;
+DROP TABLE IF EXISTS clientes;
 
 -- Tabela de Clientes
 CREATE TABLE IF NOT EXISTS clientes (
