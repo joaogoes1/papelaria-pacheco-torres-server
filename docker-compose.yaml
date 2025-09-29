@@ -59,5 +59,18 @@ services:
     environment:
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
 
+  ml-service:
+    container_name: ml_service
+    build: ../papelaria-ml-service
+    ports:
+      - '5000:5000'
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=app.py
+    volumes:
+      - ml-models:/app/models/saved
+    restart: unless-stopped
+
 volumes:
   pgdata:
+  ml-models:
