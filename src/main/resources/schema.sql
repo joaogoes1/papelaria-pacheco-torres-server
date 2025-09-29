@@ -1,9 +1,16 @@
 -- Schema para Papelaria Pacheco Torres
+DROP TABLE IF EXISTS usuarios;
 DROP TABLE IF EXISTS itens_venda;
 DROP TABLE IF EXISTS vendas;
 DROP TABLE IF EXISTS estoque;
 DROP TABLE IF EXISTS produtos;
 DROP TABLE IF EXISTS clientes;
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(16) NOT NULL,
+    senha VARCHAR(256) NOT NULL
+);
 
 -- Tabela de Clientes
 CREATE TABLE IF NOT EXISTS clientes (

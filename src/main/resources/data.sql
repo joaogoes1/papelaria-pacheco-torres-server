@@ -1,4 +1,8 @@
--- Dados de exemplo para Papelaria Pacheco Torres (idempotente)
+-- Dados de exemplo para Papelaria Pacheco Torres
+
+INSERT INTO usuarios (id, nome, senha) VALUES
+(1, 'admin', '{bcrypt}$2a$10$Q/sfaBHg3NSZPWOsY4Q1rOnL2GR0pNu9LfW6vV931hQOJwluGF22G') -- decoded: admin
+ON CONFLICT (id) DO NOTHING;
 
 -- Clientes
 INSERT INTO clientes (id, nome, cpf, endereco, telefone, email, created_at) VALUES
