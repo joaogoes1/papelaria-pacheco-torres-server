@@ -48,7 +48,7 @@ public class EstoqueService {
         Optional<Estoque> existing = repository.findById(id);
         if (existing.isPresent()) {
             Estoque e = existing.get();
-            e.setProdutoId(estoque.getProdutoId());
+            // Não altera produtoId - ele é imutável
             e.setQuantidade(estoque.getQuantidade());
             e.setQuantidadeMinima(estoque.getQuantidadeMinima());
             e.setUltimaAtualizacao(estoque.getUltimaAtualizacao());

@@ -1,5 +1,6 @@
 package org.papelariapachecotorres.vendas;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import java.util.List;
@@ -20,6 +21,7 @@ public class Venda {
     private UUID clienteId;
 
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
     private List<ItemVenda> itens;
 
     @Column(name = "total", nullable = false, precision = 10, scale = 2)
@@ -59,6 +61,7 @@ public class Venda {
 
         @ManyToOne(optional = false)
         @JoinColumn(name = "venda_id", nullable = false)
+        @com.fasterxml.jackson.annotation.JsonBackReference
         private Venda venda;
 
         @Column(name = "produto_id", nullable = false)

@@ -5,16 +5,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.papelariapachecotorres.estoque.Estoque;
+import org.papelariapachecotorres.estoque.EstoqueRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class VendaService {
     private final VendaRepository repository;
+    private final EstoqueRepository estoqueRepository;
 
-    public VendaService(VendaRepository repository) {
+    public VendaService(VendaRepository repository, EstoqueRepository estoqueRepository) {
         this.repository = repository;
+        this.estoqueRepository = estoqueRepository;
     }
 
     public List<Venda> getAll() {
@@ -48,11 +53,34 @@ public class VendaService {
         return repository.findById(id);
     }
 
+    @Transactional
     public Venda create(Venda venda) {
         // Estabelece a relação bidirecional entre venda e seus itens
         if (venda.getItens() != null) {
             venda.getItens().forEach(item -> item.setVenda(venda));
         }
+
+        // Atualiza o estoque para cada item vendido
+        if (venda.getItens() != null) {
+            for (Venda.ItemVenda item : venda.getItens()) {
+                List<Estoque> estoqueList = estoqueRepository.findByProdutoId(item.getProdutoId());
+                if (!estoqueList.isEmpty()) {
+                    Estoque estoque = estoqueList.get(0); // Pega o primeiro registro
+                    int novaQuantidade = estoque.getQuantidade() - item.getQuantidade();
+
+                    if (novaQuantidade < 0) {
+                        throw new RuntimeException("Estoque insuficiente para o produto: " + item.getProdutoId());
+                    }
+
+                    estoque.setQuantidade(novaQuantidade);
+                    estoque.setUltimaAtualizacao(Instant.now());
+                    estoqueRepository.save(estoque);
+                } else {
+                    throw new RuntimeException("Produto não encontrado no estoque: " + item.getProdutoId());
+                }
+            }
+        }
+
         return repository.save(venda);
     }
 
