@@ -1,9 +1,10 @@
 package org.papelariapachecotorres.clientes;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public class ClienteDTO {
-    private Integer id;
+    private UUID id;
     private String nome;
     private String cpf;
     private String endereco;
@@ -14,7 +15,7 @@ public class ClienteDTO {
     public ClienteDTO() {
     }
 
-    public ClienteDTO(Integer id, String nome, String cpf, String endereco, String telefone, String email, Instant createdAt) {
+    public ClienteDTO(UUID id, String nome, String cpf, String endereco, String telefone, String email, Instant createdAt) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -49,8 +50,8 @@ public class ClienteDTO {
     }
 
     // Getters e Setters para serialização/deserialização do Jackson
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
     
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }

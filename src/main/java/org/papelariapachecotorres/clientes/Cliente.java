@@ -2,14 +2,17 @@ package org.papelariapachecotorres.clientes;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "clientes")
 public class Cliente {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -32,7 +35,7 @@ public class Cliente {
 
     public Cliente() {}
 
-    public Cliente(Integer id, String nome, String cpf, String endereco, String telefone, String email, Instant createdAt) {
+    public Cliente(UUID id, String nome, String cpf, String endereco, String telefone, String email, Instant createdAt) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -42,8 +45,8 @@ public class Cliente {
         this.createdAt = createdAt;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getCpf() { return cpf; }

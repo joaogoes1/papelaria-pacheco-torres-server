@@ -2,15 +2,18 @@ package org.papelariapachecotorres.produtos;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "produtos")
 public class Produto {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -33,7 +36,7 @@ public class Produto {
 
     public Produto() {}
 
-    public Produto(Integer id, String nome, String codigo, BigDecimal preco, String categoria, String descricao, Instant createdAt) {
+    public Produto(UUID id, String nome, String codigo, BigDecimal preco, String categoria, String descricao, Instant createdAt) {
         this.id = id;
         this.nome = nome;
         this.codigo = codigo;
@@ -43,8 +46,8 @@ public class Produto {
         this.createdAt = createdAt;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getCodigo() { return codigo; }

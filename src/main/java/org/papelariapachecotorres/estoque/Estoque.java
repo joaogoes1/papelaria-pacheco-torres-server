@@ -1,18 +1,21 @@
 package org.papelariapachecotorres.estoque;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "estoque")
 public class Estoque {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
 
     // Está como FK inteira no schema; dá pra evoluir para @ManyToOne(Produto) depois.
     @Column(name = "produto_id", nullable = false)
-    private Integer produtoId;
+    private UUID produtoId;
 
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
@@ -25,7 +28,7 @@ public class Estoque {
 
     public Estoque() {}
 
-    public Estoque(Integer id, Integer produtoId, Integer quantidade, Integer quantidadeMinima, Instant ultimaAtualizacao) {
+    public Estoque(UUID id, UUID produtoId, Integer quantidade, Integer quantidadeMinima, Instant ultimaAtualizacao) {
         this.id = id;
         this.produtoId = produtoId;
         this.quantidade = quantidade;
@@ -33,10 +36,10 @@ public class Estoque {
         this.ultimaAtualizacao = ultimaAtualizacao;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public Integer getProdutoId() { return produtoId; }
-    public void setProdutoId(Integer produtoId) { this.produtoId = produtoId; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+    public UUID getProdutoId() { return produtoId; }
+    public void setProdutoId(UUID produtoId) { this.produtoId = produtoId; }
     public Integer getQuantidade() { return quantidade; }
     public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
     public Integer getQuantidadeMinima() { return quantidadeMinima; }

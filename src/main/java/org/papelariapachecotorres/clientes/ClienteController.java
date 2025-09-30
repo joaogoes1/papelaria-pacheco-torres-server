@@ -1,5 +1,9 @@
 package org.papelariapachecotorres.clientes;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/clientes")
@@ -18,16 +23,52 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<ClienteDTO> getAll() {
-        return service
-                .getAll()
-                .stream()
-                .map(ClienteDTO::fromDomain)
-                .toList();
+    public ResponseEntity<?> getAll(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "nome") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        System.out.println("=== ClienteController.getAll() ===");
+        System.out.println("page: " + page);
+        System.out.println("size: " + size);
+        System.out.println("search: '" + search + "'");
+        System.out.println("search != null: " + (search != null));
+        System.out.println("search.trim().isEmpty(): " + (search != null ? search.trim().isEmpty() : "N/A"));
+
+        // Se page e size não forem fornecidos, retorna lista completa (para selects)
+        if (page == null || size == null) {
+            List<ClienteDTO> clientes = service
+                    .getAll()
+                    .stream()
+                    .map(ClienteDTO::fromDomain)
+                    .toList();
+            return ResponseEntity.ok(clientes);
+        }
+
+        // Caso contrário, retorna paginado
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+        Page<ClienteDTO> clientesPage;
+        if (search != null && !search.trim().isEmpty()) {
+            System.out.println("✅ Usando searchPaginated com termo: '" + search + "'");
+            clientesPage = service.searchPaginated(search, pageable)
+                    .map(ClienteDTO::fromDomain);
+        } else {
+            System.out.println("⚠️ Usando getAllPaginated (sem filtro)");
+            clientesPage = service.getAllPaginated(pageable)
+                    .map(ClienteDTO::fromDomain);
+        }
+
+        System.out.println("Total elements retornados: " + clientesPage.getTotalElements());
+
+        return ResponseEntity.ok(clientesPage);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> getById(@PathVariable int id) {
+    public ResponseEntity<ClienteDTO> getById(@PathVariable UUID id) {
         return service
                 .getById(id)
                 .map((cliente) -> ResponseEntity.ok(ClienteDTO.fromDomain(cliente)))
@@ -43,7 +84,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable int id, @RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable UUID id, @RequestBody Cliente cliente) {
         Cliente updated = service.update(id, cliente);
         if (updated != null) {
             return ResponseEntity.ok(ClienteDTO.fromDomain(updated));
@@ -53,7 +94,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         if (service.delete(id)) {
             return ResponseEntity.noContent().build();
         } else {

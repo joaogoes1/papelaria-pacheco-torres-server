@@ -3,7 +3,10 @@ package org.papelariapachecotorres.produtos;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +21,20 @@ public class ProdutoService {
         return repository.findAll();
     }
 
-    public Optional<Produto> getById(int id) {
+    public Page<Produto> getAllPaginated(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public Page<Produto> searchPaginated(String search, String categoria, Pageable pageable) {
+        if (search != null && !search.trim().isEmpty()) {
+            return repository.findBySearchAndCategory(search, categoria, pageable);
+        } else if (categoria != null) {
+            return repository.findByCategoria(categoria, pageable);
+        }
+        return repository.findAll(pageable);
+    }
+
+    public Optional<Produto> getById(UUID id) {
         return repository.findById(id);
     }
 
@@ -26,7 +42,7 @@ public class ProdutoService {
         return repository.save(produto);
     }
 
-    public Produto update(int id, Produto produto) {
+    public Produto update(UUID id, Produto produto) {
         Optional<Produto> existing = repository.findById(id);
         if (existing.isPresent()) {
             Produto p = existing.get();
@@ -41,7 +57,7 @@ public class ProdutoService {
         return null;
     }
 
-    public boolean delete(int id) {
+    public boolean delete(UUID id) {
         Optional<Produto> produto = repository.findById(id);
         if (produto.isPresent()) {
             repository.delete(produto.get());

@@ -4,17 +4,18 @@ package org.papelariapachecotorres.vendas;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 public class VendaDTO {
-    private Integer id;
-    private Integer clienteId;
+    private UUID id;
+    private UUID clienteId;
     private List<ItemVendaDTO> itens;
     private BigDecimal total;
     private Instant data;
 
     public VendaDTO() {}
 
-    public VendaDTO(Integer id, Integer clienteId, List<ItemVendaDTO> itens, BigDecimal total, Instant data) {
+    public VendaDTO(UUID id, UUID clienteId, List<ItemVendaDTO> itens, BigDecimal total, Instant data) {
         this.id = id;
         this.clienteId = clienteId;
         this.itens = itens;
@@ -22,10 +23,10 @@ public class VendaDTO {
         this.data = data;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public Integer getClienteId() { return clienteId; }
-    public void setClienteId(Integer clienteId) { this.clienteId = clienteId; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+    public UUID getClienteId() { return clienteId; }
+    public void setClienteId(UUID clienteId) { this.clienteId = clienteId; }
     public List<ItemVendaDTO> getItens() { return itens; }
     public void setItens(List<ItemVendaDTO> itens) { this.itens = itens; }
     public BigDecimal getTotal() { return total; }
@@ -34,26 +35,26 @@ public class VendaDTO {
     public void setData(Instant data) { this.data = data; }
 
     public static class ItemVendaDTO {
-        private Integer id;
+        private UUID id;
         private VendaDTO venda;
-        private Integer produtoId;
+        private UUID produtoId;
         private Integer quantidade;
         private BigDecimal precoUnitario;
 
         public ItemVendaDTO() {}
 
-        public ItemVendaDTO(Integer produtoId, Integer quantidade, BigDecimal precoUnitario) {
+        public ItemVendaDTO(UUID produtoId, Integer quantidade, BigDecimal precoUnitario) {
             this.produtoId = produtoId;
             this.quantidade = quantidade;
             this.precoUnitario = precoUnitario;
         }
 
-        public Integer getId() { return id; }
-        public void setId(Integer id) { this.id = id; }
+        public UUID getId() { return id; }
+        public void setId(UUID id) { this.id = id; }
         public VendaDTO getVenda() { return venda; }
         public void setVenda(VendaDTO venda) { this.venda = venda; }
-        public Integer getProdutoId() { return produtoId; }
-        public void setProdutoId(Integer produtoId) { this.produtoId = produtoId; }
+        public UUID getProdutoId() { return produtoId; }
+        public void setProdutoId(UUID produtoId) { this.produtoId = produtoId; }
         public Integer getQuantidade() { return quantidade; }
         public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
         public BigDecimal getPrecoUnitario() { return precoUnitario; }

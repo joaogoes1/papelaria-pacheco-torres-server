@@ -2,10 +2,11 @@ package org.papelariapachecotorres.estoque;
 
 
 import java.time.Instant;
+import java.util.UUID;
 
 public class EstoqueDTO {
-    private Integer id;
-    private Integer produtoId;
+    private UUID id;
+    private UUID produtoId;
     private Integer quantidade;
     private Integer quantidadeMinima;
     private Instant ultimaAtualizacao;
@@ -13,7 +14,7 @@ public class EstoqueDTO {
     public EstoqueDTO() {
     }
 
-    public EstoqueDTO(Integer id, Integer produtoId, Integer quantidade, Integer quantidadeMinima, Instant ultimaAtualizacao) {
+    public EstoqueDTO(UUID id, UUID produtoId, Integer quantidade, Integer quantidadeMinima, Instant ultimaAtualizacao) {
         this.id = id;
         this.produtoId = produtoId;
         this.quantidade = quantidade;
@@ -21,19 +22,19 @@ public class EstoqueDTO {
         this.ultimaAtualizacao = ultimaAtualizacao;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Integer getProdutoId() {
+    public UUID getProdutoId() {
         return produtoId;
     }
 
-    public void setProdutoId(Integer produtoId) {
+    public void setProdutoId(UUID produtoId) {
         this.produtoId = produtoId;
     }
 

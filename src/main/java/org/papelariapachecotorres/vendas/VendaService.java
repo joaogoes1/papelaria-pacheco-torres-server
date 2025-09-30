@@ -1,8 +1,12 @@
 package org.papelariapachecotorres.vendas;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,15 +21,42 @@ public class VendaService {
         return repository.findAll();
     }
 
-    public Optional<Venda> getById(int id) {
+    public Page<Venda> getAllPaginated(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public Page<Venda> searchPaginated(UUID clienteId, Instant startDate, Instant endDate, Pageable pageable) {
+        if (clienteId != null || startDate != null || endDate != null) {
+            return repository.findByFilters(clienteId, startDate, endDate, pageable);
+        }
+        return repository.findAll(pageable);
+    }
+
+    public List<Venda> getByClienteId(UUID clienteId) {
+        return repository.findByClienteId(clienteId);
+    }
+
+    public Page<Venda> getByClienteIdPaginated(UUID clienteId, Pageable pageable) {
+        return repository.findByClienteId(clienteId, pageable);
+    }
+
+    public Page<Venda> searchByFilters(String nomeCliente, java.math.BigDecimal valorMin, java.math.BigDecimal valorMax, Pageable pageable) {
+        return repository.findByFiltersAdvanced(nomeCliente, valorMin, valorMax, pageable);
+    }
+
+    public Optional<Venda> getById(UUID id) {
         return repository.findById(id);
     }
 
     public Venda create(Venda venda) {
+        // Estabelece a relação bidirecional entre venda e seus itens
+        if (venda.getItens() != null) {
+            venda.getItens().forEach(item -> item.setVenda(venda));
+        }
         return repository.save(venda);
     }
 
-    public Venda update(int id, Venda venda) {
+    public Venda update(UUID id, Venda venda) {
         Optional<Venda> existing = repository.findById(id);
         if (existing.isPresent()) {
             Venda v = existing.get();
@@ -38,7 +69,7 @@ public class VendaService {
         return null;
     }
 
-    public boolean delete(int id) {
+    public boolean delete(UUID id) {
         Optional<Venda> venda = repository.findById(id);
         if (venda.isPresent()) {
             repository.delete(venda.get());

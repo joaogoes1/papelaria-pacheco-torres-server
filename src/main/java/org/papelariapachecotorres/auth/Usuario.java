@@ -1,14 +1,17 @@
 package org.papelariapachecotorres.auth;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+import java.util.UUID;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -19,7 +22,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(Integer id, String nome, String senha) {
+    public Usuario(UUID id, String nome, String senha) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
@@ -30,7 +33,7 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 

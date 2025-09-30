@@ -6,10 +6,13 @@ import java.io.Reader;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +27,15 @@ public class ClienteService {
         return repository.findAll();
     }
 
-    public Optional<Cliente> getById(int id) {
+    public Page<Cliente> getAllPaginated(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public Page<Cliente> searchPaginated(String search, Pageable pageable) {
+        return repository.findBySearchTerm(search, pageable);
+    }
+
+    public Optional<Cliente> getById(UUID id) {
         return repository.findById(id);
     }
 
@@ -32,7 +43,7 @@ public class ClienteService {
         return repository.save(cliente);
     }
 
-    public Cliente update(int id, Cliente cliente) {
+    public Cliente update(UUID id, Cliente cliente) {
         Optional<Cliente> existing = repository.findById(id);
         if (existing.isPresent()) {
             Cliente c = existing.get();
@@ -46,7 +57,7 @@ public class ClienteService {
         return null;
     }
 
-    public boolean delete(int id) {
+    public boolean delete(UUID id) {
         Optional<Cliente> cliente = repository.findById(id);
         if (cliente.isPresent()) {
             repository.delete(cliente.get());
